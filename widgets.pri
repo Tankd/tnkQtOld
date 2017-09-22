@@ -3,15 +3,15 @@ QT += widgets
 INCLUDEPATH += $$PWD
 DEPENDPATH += $$PWD
 
-
-
 HEADERS += \
     $$PWD/widgets/tabwidget.h \
     $$PWD/widgets/tabbar.h \
     $$PWD/widgets/tabbar.h \
     $$PWD/widgets/tabgrabwidget.h \
     $$PWD/widgets/tabwidget.h\
-    $$PWD/widgets/traywidget.h
+    $$PWD/widgets/traywidget.h \
+    $$PWD/widgets/stylesheet.h \
+    $$PWD/widgets/framelesswidget.h
 
 SOURCES += \     
     $$PWD/widgets/tabwidget.cpp \
@@ -19,7 +19,15 @@ SOURCES += \
     $$PWD/widgets/tabbar.cpp \
     $$PWD/widgets/tabgrabwidget.cpp \
     $$PWD/widgets/tabwidget.cpp \
-    $$PWD/widgets/traywidget.cpp
+    $$PWD/widgets/traywidget.cpp \
+    $$PWD/widgets/stylesheet.cpp \
+    $$PWD/widgets/framelesswidget.cpp
 
 RESOURCES += \
     $$PWD/widgets/res/res.qrc
+
+LIBS += User32.lib
+
+FORMS += \
+    $$PWD/widgets/framelesswidget.ui
+

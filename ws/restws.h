@@ -1,6 +1,7 @@
 #ifndef RESTWS_H
 #define RESTWS_H
 
+
 #include <QNetworkAccessManager>
 #include <QJsonObject>
 
@@ -32,6 +33,8 @@ public slots:
     QNetworkReply *post(const QString& path, const QJsonObject &object);
     QNetworkReply *put(const QString& path, const QJsonObject &object);
     QNetworkReply *del(const QString& path);
+
+
 
 
 public:

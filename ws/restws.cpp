@@ -11,6 +11,8 @@
 
 #include <QEventLoop>
 
+
+
 namespace tnk {
 
 RestWs::RestWs(QObject *parent) : QNetworkAccessManager(parent)
