@@ -42,23 +42,62 @@
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="minimizeButton">
+      <widget class="QPushButton" name="minimizeButton">
+       <property name="maximumSize">
+        <size>
+         <width>24</width>
+         <height>24</height>
+        </size>
+       </property>
        <property name="text">
-        <string>_</string>
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="res/res.qrc">
+         <normaloff>:/minimize.png</normaloff>:/minimize.png</iconset>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="maximizeButton">
+      <widget class="QPushButton" name="maximizeButton">
+       <property name="maximumSize">
+        <size>
+         <width>24</width>
+         <height>24</height>
+        </size>
+       </property>
        <property name="text">
-        <string>-</string>
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="res/res.qrc">
+         <normaloff>:/maximize.png</normaloff>:/maximize.png</iconset>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="closeButton">
+      <widget class="QPushButton" name="closeButton">
+       <property name="maximumSize">
+        <size>
+         <width>24</width>
+         <height>24</height>
+        </size>
+       </property>
        <property name="text">
-        <string>X</string>
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="res/res.qrc">
+         <normaloff>:/close.png</normaloff>:/close.png</iconset>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -69,6 +108,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="res/res.qrc"/>
+ </resources>
  <connections/>
 </ui>

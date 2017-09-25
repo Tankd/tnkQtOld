@@ -21,6 +21,8 @@ FramelessWidget::FramelessWidget(QWidget *parent) :
     ui->titleLabel->setGraphicsEffect(textShadow);
 
     onMove = false;
+
+
 }
 
 FramelessWidget::~FramelessWidget()

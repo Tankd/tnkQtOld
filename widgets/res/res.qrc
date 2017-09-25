@@ -1,5 +1,8 @@
 <RCC>
     <qresource prefix="/">
-        <file>dark.qss</file>
+        <file>close.png</file>
+        <file>maximize.png</file>
+        <file>minimize.png</file>
+        <file>shownormal.png</file>
     </qresource>
 </RCC>

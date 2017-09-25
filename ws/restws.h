@@ -40,7 +40,9 @@ public slots:
 public:
     void waitForFinished( QNetworkReply *reply) const;
     QJsonValue getJson(const QString &path, QJsonObject filter = QJsonObject());
+
     QJsonValue toJson( QNetworkReply* reply);
+    QJsonValue toJson(QByteArray data);
 
 private slots:
 

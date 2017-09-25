@@ -23,53 +23,53 @@ RestWs::RestWs(QObject *parent) : QNetworkAccessManager(parent)
 QNetworkReply *RestWs::syncRequest(REQUESTTYPE type, const QString &path, QJsonObject data)
 {
     QNetworkReply *reply = 0;
-      int count = 5;
-      do
-      {
-      qDebug() << "start" << count;
-          switch( type)
-          {
-          case RestWs::GET:
-              reply = this->get( path, data);
-              break;
+    int count = 5;
+    do
+    {
+        qDebug() << "start" << count;
+        switch( type)
+        {
+        case RestWs::GET:
+            reply = this->get( path, data);
+            break;
 
-          case RestWs::POST:
-              reply = this->post( path, data);
-              break;
+        case RestWs::POST:
+            reply = this->post( path, data);
+            break;
 
-          case RestWs::PUT:
-              reply = this->put( path, data);
-              break;
+        case RestWs::PUT:
+            reply = this->put( path, data);
+            break;
 
-          case RestWs::DEL:
-              reply = this->del(path);
-              break;
+        case RestWs::DEL:
+            reply = this->del(path);
+            break;
 
-          default:
-              break;
-          }
+        default:
+            break;
+        }
 
-            qDebug() << "wait";
-          waitForFinished( reply);
-
-
-
-          if(reply->isFinished())
-          {
-              qDebug() << "finished";
-              return reply;
-          }
-          else
-          {
-              qDebug() << "restart";
-              delete reply;
-              reply = 0;
-              count--;
-          }
-      }while(count > 0);
+        qDebug() << "wait";
+        waitForFinished( reply);
 
 
-      return reply;
+
+        if(reply->isFinished())
+        {
+            qDebug() << "finished";
+            return reply;
+        }
+        else
+        {
+            qDebug() << "restart";
+            delete reply;
+            reply = 0;
+            count--;
+        }
+    }while(count > 0);
+
+
+    return reply;
 }
 
 QNetworkReply *RestWs::get(const QString &path, QJsonObject filter)
@@ -138,18 +138,22 @@ QJsonValue RestWs::toJson(QNetworkReply *reply)
 
     if( reply->error() == QNetworkReply::NoError)
     {
-
-        QJsonDocument doc = QJsonDocument::fromJson( reply->readAll());
-        if( doc.isArray())
-            return doc.array();
-        else
-            return doc.object();
+        return toJson(reply->readAll());
     }
     else
     {
         return QJsonValue();
     }
 
+}
+
+QJsonValue RestWs::toJson(QByteArray data)
+{
+    QJsonDocument doc = QJsonDocument::fromJson( data);
+    if( doc.isArray())
+        return doc.array();
+    else
+        return doc.object();
 }
 
 void RestWs::on_authenticationRequired(QNetworkReply *reply, QAuthenticator *authenticator)
