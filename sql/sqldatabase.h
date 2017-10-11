@@ -17,6 +17,7 @@ class Database
 public:
     Database();
 
+    void loadConfig( const QString& prefix);
     void setup( const QString& name, QJsonObject data);
     void open();
     void close();

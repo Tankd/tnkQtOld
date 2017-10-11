@@ -6,11 +6,23 @@
 #include <QCoreApplication>
 #include <QDir>
 
+#include "common/config.h"
+
 namespace tnk {
 
 Database::Database()
 {
 
+}
+
+void Database::loadConfig(const QString &prefix)
+{
+    m_driver = Config::self()->value(prefix+"/driver").toString();
+    m_host =  Config::self()->value(prefix+"/host").toString();
+    m_port =  Config::self()->value(prefix+"/port").toInt();
+    m_user =  Config::self()->value(prefix+"/user").toString();
+    m_password =  Config::self()->value(prefix+"/password").toString();
+    m_databaseName =  Config::self()->value(prefix+"/database").toString();
 }
 
 
