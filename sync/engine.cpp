@@ -168,8 +168,6 @@ void Engine::createTables(QMetaObject meta)
         }
     }
 
-    //m_tableFields.insert(meta.className(), currentFields);
-
 
 }
 
