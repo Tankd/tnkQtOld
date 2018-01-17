@@ -5,7 +5,7 @@
 namespace tnk{
 namespace sync{
 
-int Object::dataFirstIndex = 1;
+int Object::dataFirstIndex = 3;
 
 Object::Object( QObject *parent) : QObject(parent)
 {
