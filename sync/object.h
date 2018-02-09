@@ -25,6 +25,9 @@ public:
 
     PROPERTY(int, id)
 
+    PROPERTY(QString, reserved)
+    PROPERTY(QDateTime, lastUpdate)
+
     public:
 
         static int dataFirstIndex;

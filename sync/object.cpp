@@ -6,7 +6,7 @@
 namespace tnk{
 namespace sync{
 
-int Object::dataFirstIndex = 1;
+int Object::dataFirstIndex = 3;
 
 Object::Object( QObject *parent) : QObject(parent)
 {
@@ -25,54 +25,6 @@ QString Object::serialize()
 
     return json.toString();
 }
-
-/*
-QJsonObject Object::toJsonObject( DataSync::Database *base)
-{
-    QJsonObject obj;
-
-
-    for(int i=dataFirstIndex; i<metaObject()->MyPROPERTYCount(); i++)
-    {
-        QMetaProperty prop = metaObject()->MyPROPERTY(i);
-
-        if( dataSync->tableFields().keys().contains( QString(prop.typeName()).remove("*"))) //Other DataSyncObject
-        {
-            Object* otherObj =  qvariant_cast<Object *>(prop.read(this));
-            obj.insert( prop.name(), otherObj->id( ));
-        }
-        else
-        {
-
-            obj.insert( prop.name(), prop.read(this).toString());
-        }
-    }
-
-
-    return obj;
-}
-
-void Object::fromJsonObject(DataSync::Database *base, QJsonObject jsonObject)
-{
-    for(int i=dataFirstIndex; i<metaObject()->MyPROPERTYCount(); i++)
-    {
-        QMetaProperty prop = metaObject()->MyPROPERTY(i);
-
-        if( base->tableFields().keys().contains( QString(prop.typeName()).remove("*"))) //Other DataSyncObject
-        {
-           // DataSyncObject* otherObj =  qvariant_cast<DataSyncObject *>(prop.read(this));
-           // obj.insert( prop.name(), otherObj->uuid( ));
-
-//            DataSyncObject *otherObject = jsonObject.value()
-        }
-        else
-        {
-            prop.write( this, jsonObject.value(prop.name()));
-        }
-    }
-
-}*/
-
 
 QDebug operator<<(QDebug dbg, const Object *object)
 {

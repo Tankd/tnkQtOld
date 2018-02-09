@@ -48,6 +48,7 @@ public:
 
     template <class T>
     void registerType() {
+
         createTables( T::staticMetaObject);
 
         _selectFirstFuncs.insert( QString(T::staticMetaObject.className()),
