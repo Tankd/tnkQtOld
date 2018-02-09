@@ -6,10 +6,10 @@ DEPENDPATH += $$PWD
 HEADERS += \
     $$PWD/common/singleton.h \
     $$PWD/common/utils.h \
-    $$PWD/common/jsonconfig.h \
     $$PWD/common/easyproperty.h \
-    $$PWD/common/config.h
+    $$PWD/common/config.h \
+    $$PWD/common/jsonobject.h
 
 SOURCES += \
-    $$PWD/common/jsonconfig.cpp \
-    $$PWD/common/utils.cpp
+    $$PWD/common/utils.cpp \
+    $$PWD/common/jsonobject.cpp

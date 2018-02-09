@@ -21,7 +21,7 @@ public:
         DELETE
     }Type;
 
-    QueryBuilder( tnk::Database *db, Type type);
+    QueryBuilder(QSqlDatabase db, Type type);
 
 
 
@@ -34,8 +34,8 @@ public:
     Type type() const;
     void setType(const Type &type);
 
-    tnk::Database *db() const;
-    void setDb( tnk::Database *db);
+    QSqlDatabase db() const;
+    void setDb( QSqlDatabase db);
 
     QMetaObject *metaObject() const;
     void setMetaObject(QMetaObject *metaObject);
@@ -43,7 +43,7 @@ public:
 private:
     Type m_type;
     QString m_where;
-    tnk::Database *m_db;
+    QSqlDatabase m_db;
     QMetaObject *m_metaObject;
 
 

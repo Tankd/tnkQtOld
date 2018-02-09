@@ -4,7 +4,7 @@
 #include <QSqlQueryModel>
 
 namespace tnk {
-
+namespace sql{
 class QueryTableModel : public QSqlQueryModel
 {
     Q_OBJECT
@@ -40,5 +40,5 @@ public:
 };
 
 }
-
+}
 #endif // QUERYTABLEMODEL_H

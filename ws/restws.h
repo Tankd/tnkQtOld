@@ -11,6 +11,7 @@
 class QNetworkReply;
 class QAuthenticator;
 namespace tnk {
+namespace ws{
 class RestWs : public QNetworkAccessManager
 {
     Q_OBJECT
@@ -56,5 +57,5 @@ private:
 
 };
 }
-
+}
 #endif // RESTWS_H

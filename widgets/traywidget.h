@@ -19,6 +19,8 @@ public:
     static LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam);
     QSystemTrayIcon *systray() const;
 
+
+    void initSystray();
 private:
     QSystemTrayIcon *m_systray;
      HHOOK hhkLowLevelKybd;

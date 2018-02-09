@@ -3,7 +3,7 @@
 namespace tnk{
 namespace sync{
 
-QueryBuilder::QueryBuilder(tnk::Database *db, QueryBuilder::Type type)
+QueryBuilder::QueryBuilder(QSqlDatabase db, QueryBuilder::Type type)
     :m_db(db),
       m_type( type)
 {}
@@ -42,12 +42,12 @@ void QueryBuilder::setType(const QueryBuilder::Type &type)
     m_type = type;
 }
 
-tnk::Database *QueryBuilder::db() const
+QSqlDatabase QueryBuilder::db() const
 {
     return m_db;
 }
 
-void QueryBuilder::setDb( tnk::Database *db)
+void QueryBuilder::setDb(QSqlDatabase db)
 {
     m_db = db;
 }
@@ -64,7 +64,7 @@ void QueryBuilder::setMetaObject(QMetaObject *metaObject)
 
 QSqlQuery QueryBuilder::genSelect()
 {
-    QSqlQuery q( db()->database());
+    QSqlQuery q( db());
     QString tableName = QString( metaObject()->className());
 
     QString base = QString("SELECT * FROM %1 ").arg( tableName);
@@ -79,7 +79,7 @@ QSqlQuery QueryBuilder::genSelect()
 
 QSqlQuery QueryBuilder::genInsert()
 {
-    QSqlQuery q( db()->database());
+    QSqlQuery q( db());
     QString tableName = QString( metaObject()->className());
 
     QString base = QString("INSERT INTO %1 ").arg( tableName);
@@ -104,7 +104,7 @@ QSqlQuery QueryBuilder::genInsert()
 
 QSqlQuery QueryBuilder::genUpdate()
 {
-    QSqlQuery q( db()->database());
+    QSqlQuery q( db());
     QString tableName = QString( metaObject()->className());
 
     QString base = QString("UPDATE %1 SET ").arg( tableName);
@@ -131,7 +131,7 @@ QSqlQuery QueryBuilder::genUpdate()
 
 QSqlQuery QueryBuilder::genDelete()
 {
-    QSqlQuery q( db()->database());
+    QSqlQuery q( db());
     QString tableName = QString( metaObject()->className());
 
     QString base = QString("DELETE  FROM %1 ").arg( tableName);

@@ -5,27 +5,20 @@
 #include <QDesktopWidget>
 #include <QCloseEvent>
 
+#include <QDebug>
+
 namespace tnk {
 
 QWidget* TrayWidget::m_selfWidget = 0;
 
-TrayWidget::TrayWidget(QWidget *parent) : QWidget(parent)
+TrayWidget::TrayWidget(QWidget *parent) : QWidget(parent), m_systray(0)
 {
     m_selfWidget = this;
     setWindowFlags( Qt::FramelessWindowHint |
                     Qt::WindowStaysOnTopHint
                     );
 
-    QMenu *menu = new QMenu();
 
-
-    menu->addAction("Show", this, SLOT(show()));
-    menu->addAction("Quit", QApplication::instance(), SLOT(quit()));
-
-    m_systray = new QSystemTrayIcon();
-    m_systray->setContextMenu( menu);
-    m_systray->setIcon( QIcon(":/logo.jpg"));
-    m_systray->show();
 
     this->setStyleSheet(
                 "QPushButton:checked{ background-color: rgb(255, 0, 0);}");
@@ -36,7 +29,8 @@ TrayWidget::TrayWidget(QWidget *parent) : QWidget(parent)
 
 TrayWidget::~TrayWidget()
 {
-    delete m_systray;
+    if(m_systray)
+        delete m_systray;
 }
 
 void TrayWidget::showEvent(QShowEvent *event)
@@ -78,6 +72,17 @@ LRESULT TrayWidget::LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam
 QSystemTrayIcon *TrayWidget::systray() const
 {
     return m_systray;
+}
+
+void TrayWidget::initSystray()
+{
+    QMenu *menu = new QMenu();
+    menu->addAction("Show", this, SLOT(show()));
+    menu->addAction("Quit", QApplication::instance(), SLOT(quit()));
+    QIcon ico = QIcon(":/logo.png");
+    m_systray = new QSystemTrayIcon(ico, this);
+    m_systray->setContextMenu( menu);
+    m_systray->show();
 }
 
 }

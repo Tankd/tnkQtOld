@@ -4,6 +4,7 @@
 #include <QSortFilterProxyModel>
 
 namespace tnk {
+namespace sql{
 class ProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
@@ -27,6 +28,7 @@ public:
 private:
     QString m_filter;
 };
+}
 }
 
 #endif // PROXYMODEL_H

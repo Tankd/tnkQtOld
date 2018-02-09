@@ -10,6 +10,7 @@
 
 #include "querybuilder.h"
 #include "object.h"
+#include <QJsonObject>
 
 namespace tnk{
 namespace sync{
@@ -19,10 +20,10 @@ class Engine : public QObject
 {
     Q_OBJECT
 public:
-    explicit Engine(QObject *parent = nullptr);
+    explicit Engine( const QString &name, QJsonObject data, QObject *parent = nullptr);
 
 
-    tnk::Database *db() const;
+    QSqlDatabase db() const;
 
     /******************************/
     typedef Object* (*selectFirstFunc)(Engine *mds, const QString& filter);
@@ -78,7 +79,7 @@ public:
 
         QSqlQuery q = builder.genQuery();
         q.exec();
-        m_db->showDebug( &q);
+        sql::showSqlQueryDebug( &q);
 
         if(q.next())
         {
@@ -98,8 +99,8 @@ public:
                     prop.write(obj, QVariant::fromValue<QObject*>(otherObj));
                 }
                 else {
-                    QVariant type = r.value(prop.name()).type();
-                    if( type == QVariant::Int)
+                    QVariant::Type type = r.value(prop.name()).type();
+                    if( type == QVariant::LongLong)
                         prop.write(obj, r.value(prop.name()).toInt());
                     else if( type == QVariant::Double)
                         prop.write(obj, r.value(prop.name()).toFloat());
@@ -123,7 +124,7 @@ public:
 
         QSqlQuery q = builder.genQuery();
         q.exec();
-        m_db->showDebug( &q);
+        sql::showSqlQueryDebug( &q);
 
         while(q.next())
         {
@@ -177,7 +178,7 @@ public:
 
 
 protected:
-    tnk::Database *m_db;
+    QSqlDatabase m_db;
     QMap<QString, Engine::selectFirstFunc> _selectFirstFuncs;
     QMap<QString, Engine::createFunc> _createFuncs;
 

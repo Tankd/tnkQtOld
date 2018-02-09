@@ -1,7 +1,7 @@
 #include "proxymodel.h"
 
 namespace tnk {
-
+namespace sql{
 ProxyModel::ProxyModel(QObject *parent) : QSortFilterProxyModel(parent)
 {
     setFilterCaseSensitivity( Qt::CaseInsensitive);
@@ -32,4 +32,5 @@ QString ProxyModel::filter() const
     return m_filter;
 }
 
+}
 }

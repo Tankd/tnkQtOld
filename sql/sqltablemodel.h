@@ -4,7 +4,7 @@
 #include <QSqlRelationalTableModel>
 
 namespace tnk {
-
+namespace sql{
 class TableModel: public QSqlRelationalTableModel
 {
     Q_OBJECT
@@ -25,5 +25,5 @@ public slots:
 };
 
 }
-
+}
 #endif // SQLTABLEMODEL_H

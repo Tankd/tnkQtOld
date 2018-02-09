@@ -1,4 +1,4 @@
-#include "jsonconfig.h"
+#include "jsonobject.h"
 
 #include <QFile>
 #include <QJsonArray>
@@ -9,12 +9,18 @@
 
 namespace tnk {
 
-JSonConfig::JSonConfig()
+JSonObject::JSonObject()
 {
 
 }
 
-void JSonConfig::load(const QString &fileName)
+QByteArray JSonObject::toString() const
+{
+    return QJsonDocument(m_data).toJson();
+}
+
+
+void JSonObject::load(const QString &fileName)
 {
     QFile in( fileName);
     in.open(QFile::ReadOnly);
@@ -23,12 +29,12 @@ void JSonConfig::load(const QString &fileName)
     in.close();
 }
 
-void JSonConfig::save(const QString &fileName)
+void JSonObject::save(const QString &fileName)
 {
 
 }
 
-QJsonValue JSonConfig::value(QString path)
+QJsonValue JSonObject::value(QString path)
 {
     QStringList paths = path.split("/");
 
@@ -43,13 +49,13 @@ QJsonValue JSonConfig::value(QString path)
     return val;
 }
 
-void JSonConfig::setValue(QString path, QJsonValue value)
+void JSonObject::setValue(QString path, QJsonValue value)
 {
     setValue(&m_data, path, value);
 }
 
 
-void JSonConfig::setValue(QJsonObject* object, QString path, QJsonValue value)
+void JSonObject::setValue(QJsonObject* object, QString path, QJsonValue value)
 {
     QStringList paths = path.split("/");
     if( paths.count()>1) // CREATE CHILD
@@ -69,11 +75,11 @@ void JSonConfig::setValue(QJsonObject* object, QString path, QJsonValue value)
     }
 }
 
-bool JSonConfig::isValid() const {
+bool JSonObject::isValid() const {
     return m_data.isEmpty() == false;
 }
 
-QJsonObject JSonConfig::data() const
+QJsonObject JSonObject::data() const
 {
     return m_data;
 }

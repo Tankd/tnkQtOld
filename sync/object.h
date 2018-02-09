@@ -28,10 +28,8 @@ public:
     public:
 
         static int dataFirstIndex;
-    /*
-    virtual QJsonObject toJsonObject(DataSync::Database *base);
-    virtual void fromJsonObject(DataSync::Database *base, QJsonObject jsonObject);
-    */
+
+    QString serialize();
 };
 
 QDebug operator<<(QDebug dbg, const Object *object);

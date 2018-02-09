@@ -30,7 +30,7 @@ public slots: // virtual methods API for QML
 
 
 protected slots: // internal callback
-   //virtual void onItemPropertyChanged (int row) = 0;
+    //virtual void onItemPropertyChanged (int row) = 0;
 
 signals: // notifier
     void countChanged (void);
@@ -48,7 +48,7 @@ public:
     {
         m_dataSync = parent;
         generateRoleNames();
-m_syncToSql = false;
+        m_syncToSql = false;
 
     }
 
@@ -144,15 +144,15 @@ m_syncToSql = false;
         int i=rowCount();
         if( m_syncToSql)
             m_dataSync->update(item);
-        beginInsertRows(QModelIndex(), i, i);        
-        m_objects.append( item);        
+        beginInsertRows(QModelIndex(), i, i);
+        m_objects.append( item);
         endInsertRows();
     }
     void prepend(T *item)
     {
         if( m_syncToSql)
             m_dataSync->update(item);
-        beginInsertRows(QModelIndex(), 0, 0);        
+        beginInsertRows(QModelIndex(), 0, 0);
         m_objects.prepend( item);
         endInsertRows();
 

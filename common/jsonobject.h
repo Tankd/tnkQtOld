@@ -6,11 +6,12 @@
 
 namespace tnk {
 
-class JSonConfig
+class JSonObject
 {
 public:
-    JSonConfig();
+    JSonObject();
 
+    QByteArray toString() const;
     void load( const QString& fileName);
     void save( const QString& fileName);
 
@@ -21,6 +22,8 @@ public:
 
     bool isValid() const;
     QJsonObject data() const;
+
+
 
 private:
     QJsonObject m_data;

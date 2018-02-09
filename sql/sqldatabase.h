@@ -9,9 +9,14 @@
 
 
 namespace tnk {
-
+namespace sql{
 typedef QList<QSqlRecord> SqlRecordList;
 
+QSqlDatabase loadConfig( const QString& prefix);
+QSqlDatabase setupSqlDatabase( const QString& name, QJsonObject data);
+
+void showSqlQueryDebug(QSqlQuery *q);
+/*
 class Database
 {
 public:
@@ -19,7 +24,7 @@ public:
 
     void loadConfig( const QString& prefix);
     void setup( const QString& name, QJsonObject data);
-    void open();
+    void open(QString suffix);
     void close();
 
     static void showDebug(QSqlQuery *q);
@@ -59,7 +64,8 @@ protected:
     QString m_password;
     QString m_databaseName;
 };
-
+*/
+}
 }
 
 

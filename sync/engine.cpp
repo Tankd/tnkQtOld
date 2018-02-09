@@ -5,16 +5,14 @@
 namespace tnk{
 namespace sync{
 
-Engine::Engine(QObject *parent)
-    : QObject(parent),
-      m_db(0)
-
+Engine::Engine( const QString &name, QJsonObject data, QObject *parent)
+    : QObject(parent)
 {
-    m_db = new tnk::Database();
-
+    m_db = tnk::sql::setupSqlDatabase( name, data);
+    m_db.open();
 }
 
-tnk::Database *Engine::db() const
+QSqlDatabase Engine::db() const
 {
     return m_db;
 }
@@ -46,7 +44,7 @@ void Engine::update(Object *object)
         }
 
         q.exec();
-        m_db->showDebug( &q);
+        sql::showSqlQueryDebug( &q);
 
         object->setProperty("id", q.lastInsertId().toInt());
 
@@ -79,7 +77,7 @@ void Engine::update(Object *object)
         }
 
         q.exec();
-        m_db->showDebug( &q);
+        sql::showSqlQueryDebug( &q);
 
     }
 }
@@ -91,20 +89,20 @@ void Engine::remove(Object *object)
     builder.setWhere( QString("id = '%1'").arg( object->get_id()));
     QSqlQuery q = builder.genQuery();
     q.exec();
-    m_db->showDebug( &q);
+    sql::showSqlQueryDebug( &q);
 }
 
 void Engine::createTables(QMetaObject meta)
 {
 
-    QSqlQuery q( m_db->database());
+    QSqlQuery q( m_db);
     //check table
-    if( m_db->database().tables().contains(meta.className(), Qt::CaseInsensitive) == false)
+    if( m_db.tables().contains(meta.className(), Qt::CaseInsensitive) == false)
     {
         qDebug() << "create" << meta.className() << "table";
-        QSqlQuery q( m_db->database());
+        QSqlQuery q( m_db);
 
-        if( m_db->database().driverName() == "QSQLITE")
+        if( m_db.driverName() == "QSQLITE")
             q.exec( QString(" CREATE TABLE 'main'.'%1' ("
                             " 'id'  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL);"
                             ).arg(meta.className()));
@@ -113,19 +111,19 @@ void Engine::createTables(QMetaObject meta)
                             " id  integer NOT NULL AUTO_INCREMENT, PRIMARY KEY(id) );"
                             ).arg(meta.className()));
 
-        m_db->showDebug( &q);
+       sql::showSqlQueryDebug( &q);
     }
     //check fields
-    if( m_db->database().driverName() == "QSQLITE")
+    if( m_db.driverName() == "QSQLITE")
         q.exec( QString("PRAGMA table_info(%1);").arg(meta.className()));
     else
         q.exec( QString("SHOW COLUMNS FROM %1;").arg(meta.className()));
-    m_db->showDebug( &q);
+    sql::showSqlQueryDebug( &q);
 
     QStringList currentFields;
     while(q.next())
     {
-        if( m_db->database().driverName() == "QSQLITE")
+        if( m_db.driverName() == "QSQLITE")
             currentFields <<  q.record().value("name").toString();
         else
             currentFields <<  q.record().value("field").toString();
@@ -162,7 +160,7 @@ void Engine::createTables(QMetaObject meta)
             QString str = QString("ALTER TABLE %1 ADD %2 %3 %4").arg( meta.className()).arg( prop.name()).arg(fieldType).arg(foreign);
 
             q.exec( str);
-            m_db->showDebug( &q);
+            sql::showSqlQueryDebug( &q);
 
             currentFields << prop.name();
         }

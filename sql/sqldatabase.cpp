@@ -9,7 +9,48 @@
 #include "common/config.h"
 
 namespace tnk {
+namespace sql{
+QSqlDatabase loadConfig(const QString &prefix)
+{
+    QSqlDatabase db = QSqlDatabase::addDatabase( Config::self()->value(prefix+"/driver").toString());
 
+    db.setHostName(  Config::self()->value(prefix+"/host").toString());
+    db.setPort(  Config::self()->value(prefix+"/port").toInt());
+    db.setUserName(  Config::self()->value(prefix+"/user").toString());
+    db.setPassword(  Config::self()->value(prefix+"/password").toString());
+    db.setDatabaseName( Config::self()->value(prefix+"/database").toString());
+
+    return db;
+}
+
+QSqlDatabase setupSqlDatabase(const QString &name, QJsonObject data)
+{
+    QSqlDatabase db = QSqlDatabase::addDatabase( data.value("driver").toString());
+
+    db.setHostName(  data.value("host").toString());
+    db.setPort(  data.value("port").toInt());
+    db.setUserName(  data.value("user").toString());
+    db.setPassword(  data.value("password").toString());
+    db.setDatabaseName( data.value("database").toString());
+
+    return db;
+}
+
+void showSqlQueryDebug(QSqlQuery *q)
+{
+    if(q == 0)
+        return;
+    if( q->lastError().isValid())
+    {
+        qDebug() << "database error" << q->lastError().databaseText() << q->lastError().driverText();
+        qDebug() << q->lastQuery();
+    }
+}
+
+
+
+
+/*
 Database::Database()
 {
 
@@ -19,7 +60,7 @@ void Database::loadConfig(const QString &prefix)
 {
     m_driver = Config::self()->value(prefix+"/driver").toString();
     m_host =  Config::self()->value(prefix+"/host").toString();
-    m_port =  Config::self()->value(prefix+"/port").toInt();
+    m_port =  Config::self()->value(prefix+"/host").toInt();
     m_user =  Config::self()->value(prefix+"/user").toString();
     m_password =  Config::self()->value(prefix+"/password").toString();
     m_databaseName =  Config::self()->value(prefix+"/database").toString();
@@ -36,12 +77,12 @@ void Database::setup(const QString &name, QJsonObject data)
     m_databaseName = data.value("database").toString();
 }
 
-void Database::open()
+void Database::open(QString suffix)
 {
-    if( m_database.connectionName() != databaseName())
-        m_database = QSqlDatabase::addDatabase( driver(), databaseName());
+    if( m_database.connectionName() != databaseName() + suffix)
+        m_database = QSqlDatabase::addDatabase( driver(), databaseName() + suffix);
 
-    qDebug() << QSqlDatabase::isDriverAvailable( driver());
+    qDebug() << "Database::open driver" << m_database.databaseName() << QSqlDatabase::isDriverAvailable( driver());
 
     if( driver() != "QSQLITE")
     {
@@ -63,8 +104,10 @@ void Database::open()
 
     m_database.open();
 
-    if( m_database.isOpen() == false)    
+    if( m_database.isOpen() == false)
         showDebug();
+
+    qDebug() << "isopen" << m_database.isOpen();
 }
 
 void Database::close()
@@ -155,6 +198,7 @@ void Database::setDatabaseName(const QString &databaseName)
 {
     m_databaseName = databaseName;
 }
+*/
 
-
+}
 }

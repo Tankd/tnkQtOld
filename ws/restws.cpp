@@ -14,6 +14,7 @@
 
 
 namespace tnk {
+namespace ws{
 
 RestWs::RestWs(QObject *parent) : QNetworkAccessManager(parent)
 {
@@ -162,4 +163,5 @@ void RestWs::on_authenticationRequired(QNetworkReply *reply, QAuthenticator *aut
     authenticator->setPassword( m_password);
 }
 
+}
 }

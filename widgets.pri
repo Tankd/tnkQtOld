@@ -4,21 +4,11 @@ INCLUDEPATH += $$PWD
 DEPENDPATH += $$PWD
 
 HEADERS += \
-    $$PWD/widgets/tabwidget.h \
-    $$PWD/widgets/tabbar.h \
-    $$PWD/widgets/tabbar.h \
-    $$PWD/widgets/tabgrabwidget.h \
-    $$PWD/widgets/tabwidget.h\
     $$PWD/widgets/traywidget.h \
     $$PWD/widgets/stylesheet.h \
     $$PWD/widgets/framelesswidget.h
 
 SOURCES += \     
-    $$PWD/widgets/tabwidget.cpp \
-    $$PWD/widgets/tabbar.cpp \
-    $$PWD/widgets/tabbar.cpp \
-    $$PWD/widgets/tabgrabwidget.cpp \
-    $$PWD/widgets/tabwidget.cpp \
     $$PWD/widgets/traywidget.cpp \
     $$PWD/widgets/stylesheet.cpp \
     $$PWD/widgets/framelesswidget.cpp

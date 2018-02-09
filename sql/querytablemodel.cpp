@@ -3,7 +3,7 @@
 #include <QDebug>
 
 namespace tnk {
-
+namespace sql{
 QString QueryTableModel::queryText() const
 {
     return _queryText;
@@ -88,5 +88,6 @@ void QueryTableModel::select()
 
 }
 
+}
 }
 

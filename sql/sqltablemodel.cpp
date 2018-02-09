@@ -1,7 +1,7 @@
 #include "sqltablemodel.h"
 
 namespace tnk {
-
+namespace sql{
 TableModel::TableModel(QSqlDatabase database, QObject *parent) : QSqlRelationalTableModel(parent, database)
 {
 
@@ -43,4 +43,5 @@ void TableModel::generateRoleNames()
     }
 }
 
+}
 }
