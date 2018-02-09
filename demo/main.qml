@@ -31,6 +31,7 @@ Window {
                     anchors.verticalCenter: parent.verticalCenter
 
                     onEditingFinished: {
+                        if(name != nameField.text)
                         name = nameField.text
                     }
                 }

@@ -28,10 +28,6 @@ public slots: // virtual methods API for QML
     virtual void remove (int idx) = 0;
     virtual QObject * get (int idx) const = 0;
 
-
-protected slots: // internal callback
-    //virtual void onItemPropertyChanged (int row) = 0;
-
 signals: // notifier
     void countChanged (void);
 };

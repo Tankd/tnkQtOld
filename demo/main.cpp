@@ -22,12 +22,23 @@ int main(int argc, char *argv[])
     json.setValue("database", "demo.sqlite");
 
 
-   auto syncEngine = new tnk::sync::Engine("demo", json.data());
-   syncEngine->registerType<MyObject>();
+    auto syncEngine = new tnk::sync::Engine("demo", json.data());
+    syncEngine->registerType<MyObject>();
 
-   tnk::sync::Model<MyObject> *model = new tnk::sync::Model<MyObject>( syncEngine);
-   model->setSyncToSql(true);
-   model->select();
+    tnk::sync::Model<MyObject> *model = new tnk::sync::Model<MyObject>( syncEngine);
+    model->setSyncToSql(true);
+    model->select();
+
+    if( !model->count())
+    {
+        for(int i=0; i<10; i++)
+        {
+            auto myObject = new MyObject();
+            myObject->set_count(i);
+            myObject->set_name("azerty");
+            model->append( myObject);
+        }
+    }
 
 
     QQmlApplicationEngine engine;
