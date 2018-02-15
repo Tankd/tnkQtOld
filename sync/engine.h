@@ -20,10 +20,12 @@ class Engine : public QObject
 {
     Q_OBJECT
 public:
-    explicit Engine( const QString &name, QJsonObject data, QObject *parent = nullptr);
+    explicit Engine(QObject *parent = nullptr);
 
 
     QSqlDatabase db() const;
+    void setDb(const QSqlDatabase &db);
+
 
     /******************************/
     typedef Object* (*selectFirstFunc)(Engine *mds, const QString& filter);
@@ -172,8 +174,9 @@ public:
         builder.setWhere( filter);
         QSqlQuery q = builder.genQuery();
         q.exec();
-        m_db->showDebug( &q);
+        sql::showSqlQueryDebug( &q);
     }
+
 
 
 

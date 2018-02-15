@@ -31,7 +31,10 @@ void JSonObject::load(const QString &fileName)
 
 void JSonObject::save(const QString &fileName)
 {
-
+    QFile out( fileName);
+    out.open( QFile::WriteOnly);
+    out.write(QJsonDocument(m_data).toJson());
+    out.close();
 }
 
 QJsonValue JSonObject::value(QString path)

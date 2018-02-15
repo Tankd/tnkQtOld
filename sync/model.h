@@ -98,6 +98,7 @@ public:
     virtual void select()
     {
         m_objects = m_dataSync->select<T>();
+
     }
 
     virtual QHash<int, QByteArray> roleNames() const{return m_roles;}

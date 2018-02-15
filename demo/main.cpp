@@ -3,10 +3,48 @@
 #include <QQmlContext>
 #include "sync/engine.h"
 #include "common/jsonobject.h"
-#include "sync/model.h"
+
+#include "sync/mymodel.h"
 
 
 #include "myobject.h"
+
+#define SYNCMODEL_GENERATE(T) \
+    public:\
+    virtual void generateRoleNames()\
+{\
+    m_roles.clear();\
+    int nbCols = T::staticMetaObject.propertyCount();\
+    for (int i = 0; i < nbCols; i++) m_roles[Qt::UserRole + i + 1] = T::staticMetaObject.property(i).name();\
+    }\
+    virtual  QVariant customData(const QModelIndex &index, int role) const\
+{\
+    return  T::staticMetaObject.property(role - Qt::UserRole - 1).read( m_objects.at( index.row()));\
+    }\
+    virtual  QMetaProperty getDataProperty(int role)\
+{\
+    return T::staticMetaObject.property(role - Qt::UserRole - 1);\
+    }\
+    virtual void subSelect() {\
+    auto typedObjects = (m_dataSync->select<T>());\
+    foreach( auto obj, typedObjects)\
+{\
+    m_objects << obj;\
+    }\
+    }
+
+class MyObjectModel : public tnk::sync::MyModel {
+
+public:
+    MyObjectModel(tnk::sync::Engine *engine, QObject *parent = nullptr)
+        :tnk::sync::MyModel( engine, parent)
+    { }
+
+    SYNCMODEL_GENERATE(MyObject)
+};
+
+
+
 
 int main(int argc, char *argv[])
 {
@@ -17,17 +55,19 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
 
-    tnk::JSonObject json;
-    json.setValue("driver", "QSQLITE");
-    json.setValue("database", "demo.sqlite");
 
 
-    auto syncEngine = new tnk::sync::Engine("demo", json.data());
+
+    auto syncEngine = new tnk::sync::Engine();
+    syncEngine->setDb( QSqlDatabase::addDatabase("QSQLITE"));
+    syncEngine->db().setDatabaseName("demo.sqlite");
+    syncEngine->db().open();
     syncEngine->registerType<MyObject>();
 
-    tnk::sync::Model<MyObject> *model = new tnk::sync::Model<MyObject>( syncEngine);
-    model->setSyncToSql(true);
+    auto model = new MyObjectModel( syncEngine);
+    model->set_syncToSql(true);
     model->select();
+
 
     if( !model->count())
     {

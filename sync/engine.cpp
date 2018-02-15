@@ -5,11 +5,10 @@
 namespace tnk{
 namespace sync{
 
-Engine::Engine( const QString &name, QJsonObject data, QObject *parent)
+Engine::Engine(  QObject *parent)
     : QObject(parent)
 {
-    m_db = tnk::sql::setupSqlDatabase( name, data);
-    m_db.open();
+
 }
 
 QSqlDatabase Engine::db() const
@@ -90,6 +89,11 @@ void Engine::remove(Object *object)
     QSqlQuery q = builder.genQuery();
     q.exec();
     sql::showSqlQueryDebug( &q);
+}
+
+void Engine::setDb(const QSqlDatabase &db)
+{
+    m_db = db;
 }
 
 void Engine::createTables(QMetaObject meta)
