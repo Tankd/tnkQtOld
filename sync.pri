@@ -14,13 +14,11 @@ QMAKE_CXXFLAGS += -fpermissive
 SOURCES += \
     $$PWD/sync/querybuilder.cpp \
     $$PWD/sync/object.cpp \
-    $$PWD/sync/model.cpp \
     $$PWD/sync/engine.cpp \
     $$PWD/sync/mymodel.cpp
 
 HEADERS += \
     $$PWD/sync/querybuilder.h \
     $$PWD/sync/object.h \
-    $$PWD/sync/model.h \
     $$PWD/sync/engine.h \
     $$PWD/sync/mymodel.h
