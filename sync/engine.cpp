@@ -2,6 +2,7 @@
 #include <QDebug>
 #include <QMetaProperty>
 
+
 namespace tnk{
 namespace sync{
 
@@ -15,6 +16,8 @@ QSqlDatabase Engine::db() const
 {
     return m_db;
 }
+
+
 
 void Engine::update(Object *object)
 {
@@ -37,7 +40,6 @@ void Engine::update(Object *object)
                     q.bindValue(":" + QString(prop.name()), otherObj->get_id());
                 }
                 else // standard value
-
                     q.bindValue(":" + QString(prop.name()), prop.read(object));
             }
         }
@@ -60,6 +62,7 @@ void Engine::update(Object *object)
 
         for(int i=1; i<object->metaObject()->propertyCount(); i++)
         {
+
             QMetaProperty prop = object->metaObject()->property(i);
 
             if( q.lastQuery().contains(":" + QString(prop.name())))
@@ -115,7 +118,7 @@ void Engine::createTables(QMetaObject meta)
                             " id  integer NOT NULL AUTO_INCREMENT, PRIMARY KEY(id) );"
                             ).arg(meta.className()));
 
-       sql::showSqlQueryDebug( &q);
+        sql::showSqlQueryDebug( &q);
     }
     //check fields
     if( m_db.driverName() == "QSQLITE")
@@ -173,5 +176,6 @@ void Engine::createTables(QMetaObject meta)
 
 }
 
-}}
+}
+}
 

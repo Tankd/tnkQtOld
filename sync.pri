@@ -15,10 +15,10 @@ SOURCES += \
     $$PWD/sync/querybuilder.cpp \
     $$PWD/sync/object.cpp \
     $$PWD/sync/engine.cpp \
-    $$PWD/sync/mymodel.cpp
+    $$PWD/sync/model.cpp
 
 HEADERS += \
     $$PWD/sync/querybuilder.h \
     $$PWD/sync/object.h \
     $$PWD/sync/engine.h \
-    $$PWD/sync/mymodel.h
+    $$PWD/sync/model.h

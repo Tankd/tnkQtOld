@@ -1,23 +1,23 @@
-#include "mymodel.h"
+#include "model.h"
 
 namespace tnk {
 namespace sync{
 
 
-MyModel::MyModel(Engine *engine,QObject *parent) : QAbstractListModel(parent),
+Model::Model(Engine *engine,QObject *parent) : QAbstractListModel(parent),
     m_dataSync( engine)
 {
 
 }
 
-int MyModel::rowCount(const QModelIndex &parent) const
+int Model::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED( parent)
     return m_objects.count();
 }
 
 
-QVariant MyModel::data(const QModelIndex &index, int role) const
+QVariant Model::data(const QModelIndex &index, int role) const
 {
     if(index.row() >= rowCount()) {
         return QString("");
@@ -32,7 +32,7 @@ QVariant MyModel::data(const QModelIndex &index, int role) const
     }
 }
 
-bool MyModel::setData(const QModelIndex &index, const QVariant &value, int role)
+bool Model::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     qDebug() << "setdata";
     bool ret = false;
@@ -55,7 +55,7 @@ bool MyModel::setData(const QModelIndex &index, const QVariant &value, int role)
     return ret;
 }
 
-void MyModel::select() {
+void Model::select() {
     clear();
     subSelect();
     generateRoleNames();

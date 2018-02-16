@@ -9,13 +9,34 @@
 namespace tnk {
 namespace sync{
 
-class MyModel : public QAbstractListModel
+#define SYNCMODEL(T) \
+    public:\
+    virtual void generateRoleNames()\
+{\
+    m_roles.clear();\
+    int nbCols = T::staticMetaObject.propertyCount();\
+    for (int i = 0; i < nbCols; i++) m_roles[Qt::UserRole + i + 1] = T::staticMetaObject.property(i).name();\
+}\
+    virtual  QVariant customData(const QModelIndex &index, int role) const\
+{\
+    return  T::staticMetaObject.property(role - Qt::UserRole - 1).read( m_objects.at( index.row()));\
+}\
+    virtual  QMetaProperty getDataProperty(int role)\
+{\
+    return T::staticMetaObject.property(role - Qt::UserRole - 1);\
+}\
+    virtual void subSelect() {\
+   m_objects = (m_dataSync->selectObjects<T>());\
+}
+
+
+class Model : public QAbstractListModel
 {
     Q_OBJECT
 
     PROPERTY(bool, syncToSql)
     public:
-        explicit MyModel(Engine *engine, QObject *parent = nullptr);
+        explicit Model(Engine *engine, QObject *parent = nullptr);
 
     virtual int rowCount(const QModelIndex &parent  = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role) const;
@@ -82,9 +103,6 @@ public slots:
             return NULL;
         return m_objects.at(idx);
     }
-
-
-
 
 protected:
     virtual  QVariant customData(const QModelIndex &index, int role) const = 0;

@@ -26,13 +26,25 @@ Window {
 
                 TextField {
                     id: nameField
-                    text: name
+                    text: name0
                     font.bold: true
                     anchors.verticalCenter: parent.verticalCenter
 
                     onEditingFinished: {
-                        if(name != nameField.text)
-                        name = nameField.text
+                        if(name0 !== nameField.text)
+                        name0 = nameField.text
+                    }
+                }
+
+                TextField {
+                    id: subnameField
+                    text: sub.name
+                    font.bold: true
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    onEditingFinished: {
+                        if(sub.name != subnameField.text)
+                        sub.name = subnameField.text
                     }
                 }
                 spacing: 10

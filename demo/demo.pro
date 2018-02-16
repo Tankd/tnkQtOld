@@ -15,7 +15,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 include ('../sync.pri')
 
 SOURCES += main.cpp \
-    myobject.cpp
+    myobject.cpp \
+    mysubobject.cpp
 
 RESOURCES += qml.qrc
 
@@ -31,4 +32,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    myobject.h
+    myobject.h \
+    mysubobject.h

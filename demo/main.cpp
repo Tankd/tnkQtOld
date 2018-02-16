@@ -3,45 +3,10 @@
 #include <QQmlContext>
 #include "sync/engine.h"
 #include "common/jsonobject.h"
-
-#include "sync/mymodel.h"
-
+#include "common/timer.h"
+#include "sync/model.h"
 
 #include "myobject.h"
-
-#define SYNCMODEL_GENERATE(T) \
-    public:\
-    virtual void generateRoleNames()\
-{\
-    m_roles.clear();\
-    int nbCols = T::staticMetaObject.propertyCount();\
-    for (int i = 0; i < nbCols; i++) m_roles[Qt::UserRole + i + 1] = T::staticMetaObject.property(i).name();\
-    }\
-    virtual  QVariant customData(const QModelIndex &index, int role) const\
-{\
-    return  T::staticMetaObject.property(role - Qt::UserRole - 1).read( m_objects.at( index.row()));\
-    }\
-    virtual  QMetaProperty getDataProperty(int role)\
-{\
-    return T::staticMetaObject.property(role - Qt::UserRole - 1);\
-    }\
-    virtual void subSelect() {\
-    auto typedObjects = (m_dataSync->select<T>());\
-    foreach( auto obj, typedObjects)\
-{\
-    m_objects << obj;\
-    }\
-    }
-
-class MyObjectModel : public tnk::sync::MyModel {
-
-public:
-    MyObjectModel(tnk::sync::Engine *engine, QObject *parent = nullptr)
-        :tnk::sync::MyModel( engine, parent)
-    { }
-
-    SYNCMODEL_GENERATE(MyObject)
-};
 
 
 
@@ -53,7 +18,7 @@ int main(int argc, char *argv[])
 #endif
 
     QGuiApplication app(argc, argv);
-
+QFile::remove("demo.sqlite");
 
 
 
@@ -62,23 +27,35 @@ int main(int argc, char *argv[])
     syncEngine->setDb( QSqlDatabase::addDatabase("QSQLITE"));
     syncEngine->db().setDatabaseName("demo.sqlite");
     syncEngine->db().open();
+
+    syncEngine->registerType<MySubObject>();
     syncEngine->registerType<MyObject>();
 
     auto model = new MyObjectModel( syncEngine);
     model->set_syncToSql(true);
-    model->select();
+    model->generateRoleNames();
 
 
     if( !model->count())
     {
-        for(int i=0; i<10; i++)
+        syncEngine->db().transaction();
+        tnk::Timer::self()->restart();
+        for(int i=0; i<5000; i++)
         {
             auto myObject = new MyObject();
             myObject->set_count(i);
-            myObject->set_name("azerty");
+            myObject->set_name0("azerty");
+            myObject->set_sub( new MySubObject());
+            myObject->get_sub()->set_name("subname");
             model->append( myObject);
         }
+        syncEngine->db().commit();
+        tnk::Timer::self()->displayElapsed("create object");
     }
+
+    tnk::Timer::self()->restart();
+    model->select();
+    tnk::Timer::self()->displayElapsed(" model->select();");
 
 
     QQmlApplicationEngine engine;
