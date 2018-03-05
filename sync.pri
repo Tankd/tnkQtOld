@@ -3,7 +3,6 @@ QT += sql network quick
 
 include ('common.pri')
 include ('sql.pri')
-include ('ws.pri')
 
 INCLUDEPATH += $$PWD
 

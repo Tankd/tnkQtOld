@@ -5,7 +5,7 @@ namespace sync{
 
 
 Model::Model(Engine *engine,QObject *parent) : QAbstractListModel(parent),
-    m_dataSync( engine)
+    m_dataSync( engine), m_syncToSql(false)
 {
 
 }
