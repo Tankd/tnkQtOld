@@ -10,7 +10,7 @@ namespace tnk {
     public:                          \
     Q_PROPERTY(type name READ get_##name() WRITE set_##name NOTIFY name##Changed)  \
     type get_##name() const { return m_##name; } \
-    void set_##name( type value) { m_##name = value; } \
+    void set_##name( type value) { m_##name = value; emit  name##Changed(); } \
     private: \
     type m_##name;
 
