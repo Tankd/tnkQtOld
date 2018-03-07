@@ -20,15 +20,22 @@ public:
     QSystemTrayIcon *systray() const;
 
 
+
     void initSystray();
 private:
     QSystemTrayIcon *m_systray;
      HHOOK hhkLowLevelKybd;
      static QWidget* m_selfWidget;
 
+
+
+
 protected:
     virtual void showEvent(QShowEvent *event) override;
     virtual void closeEvent(QCloseEvent *event) override;
+
+
+     virtual void hookKeyPressed( DWORD key) {}
 };
 
 }

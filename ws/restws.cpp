@@ -106,8 +106,11 @@ QNetworkReply *RestWs::put(const QString &path, const QJsonObject &object)
     QByteArray ba = QJsonDocument( object).toJson();
     QUrl url(m_host+path);
     QNetworkRequest request(url);
-    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    request.setHeader(QNetworkRequest::ContentLengthHeader, ba.size());
+    if(ba.isEmpty() == false)
+    {
+        request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+        request.setHeader(QNetworkRequest::ContentLengthHeader, ba.size());
+    }
     request.setRawHeader("Accept", "application/json");
 
     return QNetworkAccessManager::put( request, ba);
@@ -119,11 +122,17 @@ QNetworkReply *RestWs::del(const QString &path)
     return QNetworkAccessManager::deleteResource( QNetworkRequest(url));
 }
 
-void RestWs::waitForFinished(QNetworkReply *reply) const
+void RestWs::waitForFinished(QNetworkReply *reply)
 {
     QEventLoop loop;
     connect( reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
     loop.exec();
+}
+
+QJsonValue RestWs::waitJson(QNetworkReply *reply)
+{
+    waitForFinished(reply);
+    return toJson( reply);
 }
 
 QJsonValue RestWs::getJson(const QString &path, QJsonObject filter)
