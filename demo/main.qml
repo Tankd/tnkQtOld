@@ -44,7 +44,10 @@ Window {
 
                     onEditingFinished: {
                         if(sub.name != subnameField.text)
-                        sub.name = subnameField.text
+                        {
+                            sub.name = subnameField.text
+                            sub = sub //force setdata
+                        }
                     }
                 }
                 spacing: 10
