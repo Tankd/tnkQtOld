@@ -10,9 +10,9 @@
 
 namespace tnk {
 namespace sql{
-QSqlDatabase loadConfig(const QString &prefix)
+QSqlDatabase loadConfig(const QString& name, const QString &prefix)
 {
-    QSqlDatabase db = QSqlDatabase::addDatabase( Config::self()->value(prefix+"/driver").toString());
+    QSqlDatabase db = QSqlDatabase::addDatabase( Config::self()->value(prefix+"/driver").toString(), name);
 
     db.setHostName(  Config::self()->value(prefix+"/host").toString());
     db.setPort(  Config::self()->value(prefix+"/port").toInt());
@@ -36,14 +36,25 @@ QSqlDatabase setupSqlDatabase(const QString &name, QJsonObject data)
     return db;
 }
 
-void showSqlQueryDebug(QSqlQuery *q)
+void showSqlDebug(QSqlQuery *q)
 {
     if(q == 0)
         return;
     if( q->lastError().isValid())
     {
-        qDebug() << "database error" << q->lastError().databaseText() << q->lastError().driverText();
+        qDebug() << "query error" << q->lastError().databaseText() << q->lastError().driverText();
         qDebug() << q->lastQuery();
+    }
+}
+
+
+void showSqlDebug(QSqlDatabase *db)
+{
+    if(db == 0)
+        return;
+    if( db->lastError().isValid())
+    {
+        qDebug() << "database error" << db->lastError().databaseText() << db->lastError().driverText() ;
     }
 }
 

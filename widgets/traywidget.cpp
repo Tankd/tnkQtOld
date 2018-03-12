@@ -57,11 +57,12 @@ LRESULT TrayWidget::LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam
         {
         // Pass KeyDown/KeyUp messages for Qt class to logicize
         case WM_KEYDOWN:
+          reinterpret_cast<TrayWidget*>(  m_selfWidget)->hookKeyPressed( PKBDLLHOOKSTRUCT(lParam)->vkCode);
             if(PKBDLLHOOKSTRUCT(lParam)->vkCode == VK_F2)
             {
-
                 m_selfWidget->setVisible( !m_selfWidget->isVisible());
                 m_selfWidget->raise();
+
             }
             break;
         }

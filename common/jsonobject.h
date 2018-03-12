@@ -6,10 +6,12 @@
 
 namespace tnk {
 
-class JSonObject
+class JsonObject
 {
 public:
-    JSonObject();
+    JsonObject();
+    JsonObject( const QJsonValue& value);
+
 
     QByteArray toString() const;
     void load( const QString& fileName);
@@ -28,7 +30,7 @@ public:
 private:
     QJsonObject m_data;
 
-    void setValue(QJsonObject *object, QString path, QJsonValue value);
+    void setValue(QJsonObject *object, QString path, QJsonValue value); //no array
 };
 
 }
