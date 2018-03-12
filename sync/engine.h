@@ -50,7 +50,7 @@ public:
 
 
     template <class T>
-    void registerType() {
+    void registerType( const char *uri, int versionMajor, int versionMinor) {
 
         createTables( T::staticMetaObject);
 

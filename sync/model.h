@@ -27,7 +27,12 @@ namespace sync{
 }\
     virtual void subSelect() {\
    m_objects = (m_dataSync->selectObjects<T>());\
-}
+}\
+    virtual T * get (int idx) const{\
+        if( idx > count())\
+            return NULL;\
+        return reinterpret_cast<T*>( m_objects.at(idx));\
+    }
 
 
 class Model : public QAbstractListModel
@@ -98,11 +103,7 @@ public slots:
         endRemoveRows();
     }
 
-    virtual Object * get (int idx) const{
-        if( idx > count())
-            return NULL;
-        return m_objects.at(idx);
-    }
+
 
 protected:
     virtual  QVariant customData(const QModelIndex &index, int role) const = 0;
