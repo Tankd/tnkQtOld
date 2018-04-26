@@ -45,7 +45,7 @@ void Engine::update(Object *object)
         }
 
         q.exec();
-        sql::showSqlQueryDebug( &q);
+        sql::showSqlDebug( &q);
 
         object->setProperty("id", q.lastInsertId().toInt());
 
@@ -79,7 +79,7 @@ void Engine::update(Object *object)
         }
 
         q.exec();
-        sql::showSqlQueryDebug( &q);
+        sql::showSqlDebug( &q);
 
     }
 }
@@ -91,7 +91,7 @@ void Engine::remove(Object *object)
     builder.setWhere( QString("id = '%1'").arg( object->get_id()));
     QSqlQuery q = builder.genQuery();
     q.exec();
-    sql::showSqlQueryDebug( &q);
+    sql::showSqlDebug( &q);
 }
 
 void Engine::setDb(const QSqlDatabase &db)
@@ -118,14 +118,14 @@ void Engine::createTables(QMetaObject meta)
                             " id  integer NOT NULL AUTO_INCREMENT, PRIMARY KEY(id) );"
                             ).arg(meta.className()));
 
-        sql::showSqlQueryDebug( &q);
+        sql::showSqlDebug( &q);
     }
     //check fields
     if( m_db.driverName() == "QSQLITE")
         q.exec( QString("PRAGMA table_info(%1);").arg(meta.className()));
     else
         q.exec( QString("SHOW COLUMNS FROM %1;").arg(meta.className()));
-    sql::showSqlQueryDebug( &q);
+    sql::showSqlDebug( &q);
 
     QStringList currentFields;
     while(q.next())
@@ -167,7 +167,7 @@ void Engine::createTables(QMetaObject meta)
             QString str = QString("ALTER TABLE %1 ADD %2 %3 %4").arg( meta.className()).arg( prop.name()).arg(fieldType).arg(foreign);
 
             q.exec( str);
-            sql::showSqlQueryDebug( &q);
+            sql::showSqlDebug( &q);
 
             currentFields << prop.name();
         }

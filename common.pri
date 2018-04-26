@@ -3,6 +3,7 @@
 INCLUDEPATH += $$PWD
 DEPENDPATH += $$PWD
 
+
 HEADERS += \
     $$PWD/common/singleton.h \
     $$PWD/common/utils.h \

@@ -15,7 +15,7 @@ Object::Object( QObject *parent) : QObject(parent)
 
 QString Object::serialize()
 {
-    JSonObject json;
+    JsonObject json;
     for(int i=dataFirstIndex; i<metaObject()->propertyCount(); i++)
     {
         QMetaProperty prop = metaObject()->property(i);

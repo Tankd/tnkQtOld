@@ -85,7 +85,7 @@ public:
 
         QSqlQuery q = builder.genQuery();
         q.exec();
-        sql::showSqlQueryDebug( &q);
+        sql::showSqlDebug( &q);
 
         if(q.next())
         {
@@ -130,7 +130,7 @@ public:
 
         QSqlQuery q = builder.genQuery();
         q.exec();
-        sql::showSqlQueryDebug( &q);
+        sql::showSqlDebug( &q);
 
         if(q.next())
         {
@@ -175,7 +175,7 @@ public:
 
         QSqlQuery q = builder.genQuery();
         q.exec();
-        sql::showSqlQueryDebug( &q);
+        sql::showSqlDebug( &q);
 
         while(q.next())
         {
@@ -220,7 +220,7 @@ public:
 
         QSqlQuery q = builder.genQuery();
         q.exec();
-        sql::showSqlQueryDebug( &q);
+        sql::showSqlDebug( &q);
 
         while(q.next())
         {
@@ -266,7 +266,7 @@ public:
         builder.setWhere( filter);
         QSqlQuery q = builder.genQuery();
         q.exec();
-        sql::showSqlQueryDebug( &q);
+        sql::showSqlDebug( &q);
     }
 
 protected:

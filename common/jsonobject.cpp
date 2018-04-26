@@ -85,12 +85,12 @@ void JsonObject::setValue(QJsonObject* object, QString path, QJsonValue value)
         QString path0 = paths.at(0);
         paths.removeFirst();
 
-            QJsonObject obj;
-            if( object->keys().contains(path0))
-                obj = object->value(path0).toObject();
+        QJsonObject obj;
+        if( object->keys().contains(path0))
+            obj = object->value(path0).toObject();
 
-            setValue( &obj, paths.join("/"), value);
-            object->insert( path0, obj);
+        setValue( &obj, paths.join("/"), value);
+        object->insert( path0, obj);
     }
     else //SET VALUE
     {
