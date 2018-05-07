@@ -17,6 +17,25 @@ public:
     virtual void close() = 0;
     virtual RowData nextRow() = 0;
 
+    virtual QList<RowData> readAll()
+    {
+        QList<RowData> result;
+
+        while(1)
+        {
+
+            auto row = nextRow();
+            if( row.isEmpty())
+                break;
+
+            result << row;
+
+        }
+
+
+        return result;
+    }
+
     QString decodeString(const QByteArray& str, const QByteArray &codecName = "ISO-8859-15");
 
 

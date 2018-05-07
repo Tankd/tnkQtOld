@@ -21,6 +21,7 @@ public:
     RowData nextRow();
 
 
+
 private:
       QFile *m_inFile;
 };

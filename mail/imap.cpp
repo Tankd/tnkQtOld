@@ -3,10 +3,11 @@
 #include <QDebug>
 #include <QEventLoop>
 #include <QSslConfiguration>
+#include <QTextCodec>
 
 #include "common/utils.h"
 
-IMap::IMap(QObject *parent) : QObject(parent), m_socket(0), m_timeOut(10000), m_lastSendId(0)
+IMap::IMap(QObject *parent) : QObject(parent), m_socket(0), m_timeOut(10000), m_lastSendId(0), m_currentCommand(0)
 {
 
 }
@@ -25,20 +26,33 @@ void IMap::waitForResponse()
     loop.exec();
 }*/
 
-int IMap::send(const QString &data, bool addCommandId)
+int IMap::send(IMapCommand* command, bool addCommandId)
+{
+    if(addCommandId)
+    {
+        m_lastSendId++;
+        socket()->write(  ( QString::number(m_lastSendId) +" " + command->generate()).toUtf8() + "\r\n");
+        return m_lastSendId;
+    }
+    else
+    {
+        socket()->write(  command->generate().toUtf8() + "\r\n");
+        return -1;
+    }
+
+}
+
+void IMap::send(QString data, bool addCommandId)
 {
     if(addCommandId)
     {
         m_lastSendId++;
         socket()->write(  ( QString::number(m_lastSendId) +" " + data).toUtf8() + "\r\n");
-        return m_lastSendId;
     }
     else
     {
         socket()->write(  data.toUtf8() + "\r\n");
-        return -1;
     }
-
 }
 
 void IMap::connectToHost()
@@ -86,86 +100,30 @@ void IMap::connectToHost()
 }
 
 void IMap::login()
-{   
-    setState( Loggin);
-    if( get_authMethod() == IMap::AUTHPLAIN)
-    {
-        send("authenticate plain");
-    }
+{
+    runCommand(new IMapCommand( IMapCommand::Login));
 }
 
-QList<uint> IMap::listMails(const QString flag)
+void IMap::listFolder(const QString &name)
 {
-    QList<uint> result;
-    /*send("UID SEARCH " +flag);
-    waitForResponse();
-
-
-    QList<QByteArray> list = m_responseText.split('\r\n');
-
-    QList<uint> result;
-    QString str = list.at(0);
-    str.remove(0, str.indexOf("SEARCH")+7);
-
-    if(str.size())
-        foreach( QString s, str.split(" "))
-            result << s.toUInt();
-*/
-    return result;
-
+    runCommand(new IMapCommand( IMapCommand::ListFolder, name));
 }
 
-QByteArray IMap::fetchMail(uint uid)
+void IMap::listMails(const QString flag)
 {
-    /* int id = send( QString("FETCH %1 body[]").arg( uid));
-    waitForResponse();
-
-    if( m_responseText.contains("FETCH") == false)
-        return QByteArray();
-
-    QString head = m_responseText;
-    head.remove(0, head.indexOf("{")+1);
-    head.remove( head.indexOf("}"), head.size());
-    uint size = head.toUInt();
-    waitForResponse();
-
-    QByteArray data;
-    while( data.size()<=size)
-    {
-        waitForResponse();
-        data = m_responseText;
-        //str.remove(0, str.indexOf('\r\n')+1);
-        //str.remove( str.lastIndexOf('\r\n'), str.size());
-    }
-
-    return data;*/
-    return "";
+    runCommand( new IMapCommand( IMapCommand::ListMails, flag));
+    //send("UID SEARCH " +flag);
 }
 
-QStringList IMap::listMailBox()
-{
-    /*send( QString("LIST \"\" \"*\""));
-    waitForResponse();
-
-    auto result = QString(m_responseText).split("\r\n");
-
-    return result;*/
-    return QStringList();
+void IMap::fetchMail(QString uid)
+{    
+     runCommand( new IMapCommand( IMapCommand::FetchMail, uid));
 }
 
-bool IMap::selectMailBox(const QString &name)
+
+void IMap::selectMailBox(const QString &name)
 {
-    /*send( QString("SELECT %1").arg(name));
-    waitForResponse();
-
-    if( m_responseText.contains("NO Mailbox") || m_responseText.contains("BAD Command"))
-    {
-        qDebug() << "IMap::selectMailBox" << name << "error";
-        return false;
-    }*/
-
-    return true;
-
+    runCommand(new IMapCommand( IMapCommand::SelectFolder, name));
 }
 
 void IMap::socketStateChanged(QAbstractSocket::SocketState state)
@@ -193,23 +151,43 @@ void IMap::socketError(QAbstractSocket::SocketError error)
 
 void IMap::socketReadyRead()
 {
-    m_responseText = socket()->readAll();
-    if( m_responseText == "+\r\n") //send login data
+
+    if( m_currentCommand == 0)
+        return;
+
+    QByteArray response = socket()->readAll();
+
+    if( m_currentCommand->type() == IMapCommand::Login)
     {
-        send(QByteArray().append((char) 0).append(get_login()).append((char) 0).append(get_password()).toBase64(), false);
+        if( response == "+\r\n") //send login data
+        {
+            send(QByteArray().append((char) 0).append(get_login()).append((char) 0).append(get_password()).toBase64(), false);
+        }
+        else if(  response.contains("OK AUTHENTICATE completed")) //logged in
+        {
+            setState( Logged);
+            emit commandFinished( m_currentCommand);
+            m_currentCommand = 0;
+            runCommand();
+        }
     }
-    else if( m_responseText.contains("OK AUTHENTICATE completed")) //logged in
+    else
     {
-        setState( Logged);
+        m_currentCommand->parseReply( response);
     }
 
-    emit responseRecieved();
+
 }
+
+
+
 
 void IMap::socketSslErrors(const QList<QSslError> &errors)
 {
     ((QSslSocket*) m_socket)->ignoreSslErrors( errors);
 }
+
+
 
 IMap::State IMap::state() const
 {
@@ -225,8 +203,4 @@ void IMap::setState(const IMap::State &state)
     }
 }
 
-QByteArray IMap::responseText() const
-{
-    return m_responseText;
-}
 

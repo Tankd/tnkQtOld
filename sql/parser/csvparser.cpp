@@ -71,4 +71,5 @@ BaseParser::RowData CsvParser::nextRow()
     return data;
 }
 
+
 }}

@@ -17,7 +17,8 @@ HEADERS += \
     $$PWD/mail/qmailnamespace.h \
     $$PWD/mail/qmailtimestamp.h \
     $$PWD/mail/qprivateimplementation.h \
-    $$PWD/mail/qprivateimplementationdef_p.h
+    $$PWD/mail/qprivateimplementationdef_p.h \
+    $$PWD/mail/imapcommand.h
 
 SOURCES += \
     $$PWD/mail/imap.cpp \
@@ -31,4 +32,5 @@ SOURCES += \
     $$PWD/mail/qmailmessagefwd.cpp \
     $$PWD/mail/qmailnamespace.cpp \
     $$PWD/mail/qmailtimestamp.cpp \
-    $$PWD/mail/qprivateimplementation.cpp
+    $$PWD/mail/qprivateimplementation.cpp \
+    $$PWD/mail/imapcommand.cpp

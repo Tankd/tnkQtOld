@@ -6,6 +6,10 @@
 #include <QSslSocket>
 #include "common/easyproperty.h"
 
+#include "imapcommand.h"
+
+
+
 class IMap : public QObject
 {
     Q_OBJECT
@@ -34,6 +38,10 @@ public:
     };
 
 
+
+
+
+
     PROPERTY( QString, host)
     PROPERTY( uint, port)
     PROPERTY( QString, login)
@@ -50,28 +58,26 @@ public:
     QTcpSocket *socket() const;
 
 
-  //  void waitForResponse();
-
-    QByteArray responseText() const;
 
 
-    QStringList listMailBox();
     State state() const;
     void setState(const State &state);
 
+    void send(QString data, bool addCommandId);
 signals:
-    void responseRecieved();
+    void commandFinished(IMapCommand* command);
     void stateChanged( State state);
 
 public slots:
 
-    int send( const QString& data, bool addCommandId = true);
+    int send(IMapCommand *command, bool addCommandId = true);
     void connectToHost();
     void login();
 
-    bool selectMailBox( const QString& name);
-    QList<uint> listMails(const QString flag);
-    QByteArray fetchMail(uint uid);
+    void listFolder(const QString& name);
+    void selectMailBox( const QString& name);
+    void listMails(const QString flag);
+    void fetchMail(QString uid);
 
 
 protected slots:
@@ -82,19 +88,58 @@ protected slots:
     void socketSslErrors(const QList<QSslError> &errors);
 
 
+public slots:
+    void runCommand(IMapCommand* command = 0)
+    {
+
+        if( command)
+        {
+            connect(command, &IMapCommand::finished, this, &IMap::on_imapcommandFinished);
+            m_nextCommands << command;
+        }
+
+        if( m_currentCommand != 0)
+            return;
+
+        if( m_nextCommands.size() == 0)
+            return;
+
+
+        if(  command && m_currentCommand && m_currentCommand != command)
+            qDebug() << "PUTAIN CA MERDE GRAVE";
+
+        m_currentCommand = m_nextCommands.at(0);
+        m_nextCommands.removeFirst();
+
+        send(m_currentCommand);
+
+        if( m_currentCommand->type() == IMapCommand::Login)
+            setState( Loggin);
+    }
+
+
+private slots:
+    void on_imapcommandFinished(IMapCommand* command)
+    {
+
+        if( m_currentCommand == command)
+            m_currentCommand = 0;
+
+        runCommand( );
+        emit commandFinished(command);
+    }
 
 
 protected:
     QTcpSocket *m_socket;
-
     State m_state;
-
-    QByteArray m_responseText;
 
     int m_lastSendId;
 
 
-    QHash<uint, QByteArray> m_mailDatas;
+    IMapCommand* m_currentCommand;
+    QList<IMapCommand*> m_nextCommands;
+
 
 };
 
