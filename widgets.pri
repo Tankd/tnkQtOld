@@ -7,8 +7,7 @@ HEADERS += \
     $$PWD/widgets/traywidget.h \
     $$PWD/widgets/stylesheet.h \
     $$PWD/widgets/framelesswidget.h
-
-SOURCES += \     
+SOURCES += \
     $$PWD/widgets/traywidget.cpp \
     $$PWD/widgets/stylesheet.cpp \
     $$PWD/widgets/framelesswidget.cpp

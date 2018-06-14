@@ -4,6 +4,9 @@
 #include <QSqlDriver>
 #include <QSqlField>
 
+#include <QProcess>
+
+
 namespace tnk {
 namespace parser {
 
@@ -16,53 +19,118 @@ XlsParser::XlsParser()
 
 void XlsParser::open(const QString &path)
 {
-    m_excel = QSqlDatabase::addDatabase("QODBC", "xlsx_connection");
-    m_excel.setDatabaseName("DRIVER={Microsoft Excel Driver (*.xls, *.xlsx, *.xlsm, *.xlsb)};DBQ=" + QFileInfo(path).absoluteFilePath());
-    m_excel.open();
-    if( m_excel.isOpen() == false)
-    {
-        sql::showSqlDebug( &m_excel);
-        return;
-    }
+    m_isOpen = false;
 
-    QStringList tables = m_excel.driver()->tables(QSql::AllTables);
-    if( tables.isEmpty())
-    {
-        close();
-        return;
-    }
-    qDebug() << tables.at(0);
+    QProcess p;
+    p.setProgram("pyxls.exe");
+    QStringList args;
+    args << "list";
+    args <<  path;
+    p.setArguments( args);
+    p.start();
+    p.waitForStarted();
+    p.waitForFinished();
 
-    query = QSqlQuery("select * from [" + tables.at(0) + "]", m_excel); // Select range, place A1:B5 after $
-    /*while (query.next())
-    {
-        QString column1= query.value(0).toString();
-        qDebug() << column1;
-    }
-    */
+    auto result = QString( p.readAll()).split("\r\n");
+    result.removeAll("");
+    QString line = result.last();
+    line.remove("[");
+    line.remove("]");
+    line.remove("'");
+    m_tables = line.split(",");
 
-    for( int i=0; i<query.record().count(); i++)
-       m_headers << decodeString( query.record().field(i).name().toLocal8Bit());
+    m_isOpen = true;
+    m_filePath = path;
 }
 
 void XlsParser::close()
 {
-    m_excel.close();
-   // QSqlDatabase::removeDatabase("xlsx_connection");
+    /*if(m_excel)
+    {
+        delete m_excel;
+        m_excel = 0;
+    }*/
 }
 
 BaseParser::RowData XlsParser::nextRow()
 {
-    RowData data;
-    if( query.next())
-    {
 
-       for(int i=0; i<query.record().count(); i++)
-       {
-            data[m_headers.at(i)] = query.value(i).toString();
-       }
+    RowData data;
+
+    if( m_currentRow >= m_lines.count())
+        return data;
+
+    QStringList line = m_lines.at( m_currentRow).split(";");
+
+    for(int i=0; i< line.count(); i++)
+    {
+        data[m_headers.at(i)] = decodeString( line.at(i));
     }
+
+    m_currentRow++;
     return data;
+}
+
+
+
+
+void XlsParser::selectTable(bool withHeaders, const QString &tableName)
+{
+
+
+    if( m_tables.contains( tableName) == false)
+        return;
+
+
+    QProcess p;
+    p.setProgram("pyxls.exe");
+    QStringList args;
+    args << "get";
+    args <<  m_filePath;
+    args << tableName;
+    p.setArguments( args);
+    p.start();
+    p.waitForStarted();
+    p.waitForFinished();
+
+
+    m_lines = QString::fromLocal8Bit( p.readAll()).split("\r\n");
+    if( m_lines.isEmpty())
+        return;
+
+    if(m_lines.first().contains("WARNING "))
+        m_lines.removeFirst();
+
+
+    m_headers.clear();
+
+    QStringList TempHeaders;
+
+    m_headers.clear();
+
+    TempHeaders = m_lines.first().split(";");
+
+    TempHeaders.removeAll("");
+
+    int currentCol = 1;
+
+    foreach(QString h, TempHeaders)
+    {
+        if( withHeaders)
+        {
+            h = decodeString( h.trimmed());
+            m_headers.push_back(h);
+        }
+        else
+        {
+            m_headers.append( QString("Colonne %1").arg(nth_letter(currentCol)));
+            currentCol++;
+        }
+    }
+
+
+    m_currentRow = withHeaders ? 1 : 0;
+
 }
 
 }}

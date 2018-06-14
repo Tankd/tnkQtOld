@@ -1,8 +1,7 @@
 #ifndef XLSPARSER_H
 #define XLSPARSER_H
 
-#include "baseparser.h"
-#include "sql/sqldatabase.h"
+#include "csvparser.h"
 
 namespace tnk {
 namespace parser {
@@ -20,8 +19,18 @@ public:
 
 
 private:
-    QSqlDatabase m_excel;
-    QSqlQuery query;
+    QString m_filePath;
+     int m_currentRow;
+
+
+     QStringList m_lines;
+
+
+
+
+    // BaseParser interface
+public:
+    void selectTable(bool withHeaders, const QString& tableName);
 };
 
 }}

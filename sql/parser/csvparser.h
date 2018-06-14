@@ -24,6 +24,10 @@ public:
 
 private:
       QFile *m_inFile;
+
+      // BaseParser interface
+public:
+      void selectTable(bool withHeaders, const QString &tableName);
 };
 
 }}
