@@ -11,9 +11,7 @@ HEADERS += \
     $$PWD/sql/sqldatabase.h \
     $$PWD/sql/parser/baseparser.h \
     $$PWD/sql/parser/csvparser.h \
-    $$PWD/sql/parser/xlsparser.h \
-    $$PWD/sql/parser/axxlsparser.h \
-    $$PWD/sql/parser/basicExcel/BasicExcel.hpp
+    $$PWD/sql/parser/xlsparser.h
 
 SOURCES += \    
     $$PWD/sql/querytablemodel.cpp \
@@ -22,6 +20,4 @@ SOURCES += \
     $$PWD/sql/sqldatabase.cpp \
     $$PWD/sql/parser/baseparser.cpp \
     $$PWD/sql/parser/csvparser.cpp \
-    $$PWD/sql/parser/xlsparser.cpp \
-    $$PWD/sql/parser/axxlsparser.cpp \
-    $$PWD/sql/parser/basicExcel/BasicExcel.cpp
+    $$PWD/sql/parser/xlsparser.cpp
