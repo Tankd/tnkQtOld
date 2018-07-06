@@ -6,7 +6,6 @@
 namespace tnk{
 namespace sync{
 
-int Object::dataFirstIndex = 3;
 
 Object::Object( QObject *parent) : QObject(parent)
 {
@@ -16,7 +15,7 @@ Object::Object( QObject *parent) : QObject(parent)
 QString Object::serialize()
 {
     JsonObject json;
-    for(int i=dataFirstIndex; i<metaObject()->propertyCount(); i++)
+    for(int i=metaObject()->propertyOffset(); i<metaObject()->propertyCount(); i++)
     {
         QMetaProperty prop = metaObject()->property(i);
         json.setValue( prop.name(), prop.read( this).toString());
@@ -29,7 +28,7 @@ QString Object::serialize()
 QDebug operator<<(QDebug dbg, const Object *object)
 {
     dbg.space() << object->metaObject()->className();
-    for(int i=1; i<object->metaObject()->propertyCount(); i++)
+    for(int i=object->metaObject()->propertyOffset(); i<object->metaObject()->propertyCount(); i++)
     {
         QMetaProperty prop = object->metaObject()->property(i);
         dbg.nospace() << prop.name() << "=" << prop.read(object)<< " ; ";

@@ -12,6 +12,7 @@
 
 namespace tnk {
 namespace sql{
+
 QSqlDatabase loadConfig(const QString& name, const QString &prefix)
 {
     QSqlDatabase db = QSqlDatabase::addDatabase( Config::self()->value(prefix+"/driver").toString(), name);
