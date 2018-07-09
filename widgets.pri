@@ -7,13 +7,15 @@ HEADERS += \
     $$PWD/widgets/traywidget.h \
     $$PWD/widgets/stylesheet.h \
     $$PWD/widgets/jsoneditdialog.h \
-    $$PWD/external/QJsonModel/qjsonmodel.h
+    $$PWD/external/QJsonModel/qjsonmodel.h \
+    $$PWD/widgets/tabbedwidget.h
 
 SOURCES += \
     $$PWD/widgets/traywidget.cpp \
     $$PWD/widgets/stylesheet.cpp \
     $$PWD/widgets/jsoneditdialog.cpp \
-    $$PWD/external/QJsonModel/qjsonmodel.cpp
+    $$PWD/external/QJsonModel/qjsonmodel.cpp \
+    $$PWD/widgets/tabbedwidget.cpp
 
 RESOURCES += \
     $$PWD/widgets/res/res.qrc

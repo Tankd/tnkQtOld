@@ -17,6 +17,12 @@ QSqlDatabase setupSqlDatabase( const QString& name, QJsonObject data);
 
 void showSqlDebug(QSqlQuery *q);
 void showSqlDebug(QSqlDatabase *db);
+
+
+void createTable(QSqlDatabase db, const QString &tableName, QList<QSqlField> fields);
+void createTable(QSqlDatabase db, const QString &tableName, QMetaObject meta);
+
+void checkConnected( QSqlDatabase db);
 }
 }
 
