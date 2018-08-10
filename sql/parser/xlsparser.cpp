@@ -124,7 +124,7 @@ void XlsParser::selectTable(const QString &tableName, int headerLine)
 
     foreach(QString h, TempHeaders)
     {
-        if( headerLine)
+        if( headerLine >= 0)
         {
             h = decodeString( h.trimmed());
             m_headers.push_back(h);
@@ -137,7 +137,7 @@ void XlsParser::selectTable(const QString &tableName, int headerLine)
     }
 
 
-    m_currentRow = headerLine ? 1 : 0;
+    m_currentRow = (headerLine>=0) ? 1 : 0;
 
 }
 

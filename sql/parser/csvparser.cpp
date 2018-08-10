@@ -78,7 +78,7 @@ void tnk::parser::CsvParser::selectTable(const QString &tableName, int headerLin
 
     foreach(QString h, TempHeaders)
     {
-        if( headerLine)
+        if( headerLine >= 0)
         {
             h = h.trimmed();
             m_headers.push_back(h);
@@ -90,7 +90,7 @@ void tnk::parser::CsvParser::selectTable(const QString &tableName, int headerLin
         }
     }
 
-    if( headerLine == false)
+    if( headerLine < 0)
         m_inFile->seek(0);
 
 }

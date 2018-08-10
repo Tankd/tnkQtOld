@@ -51,6 +51,7 @@ QString BaseParser::decodeString(const QString &str)
     s.replace(QRegExp("[ë]"), "e");
     s.replace(QRegExp("[ô]"), "o");
     s.replace(QRegExp("°"), "_");
+    s.replace(QRegExp("'"), "_");
     //s.replace( QRegExp("[^A-Za-z0-9.@<>éèë/ ]"), "");
     s.replace("  ", " ");
     return s;
