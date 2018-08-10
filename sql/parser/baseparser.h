@@ -15,7 +15,7 @@ public:
     virtual ~BaseParser(){}
 
     virtual void open( const QString& path) = 0;
-    virtual void selectTable(bool withHeaders, const QString& tableName = QString() ) = 0;
+    virtual void selectTable( const QString& tableName = QString(), int headerLine = 1 ) = 0;
     virtual void close() = 0;
     virtual RowData nextRow() = 0;
 

@@ -30,7 +30,7 @@ private:
 
     // BaseParser interface
 public:
-    void selectTable(bool withHeaders, const QString& tableName);
+    void selectTable(const QString& tableName = QString(), int headerLine = 1);
 };
 
 }}

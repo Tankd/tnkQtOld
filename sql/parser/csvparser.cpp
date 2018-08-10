@@ -7,7 +7,7 @@ namespace tnk {
 namespace parser {
 
 CsvParser::CsvParser()
-    :BaseParser(), m_inFile(0)
+    :BaseParser()
 {
 
 }
@@ -18,25 +18,22 @@ void CsvParser::open(const QString &path)
     if(m_inFile->open(QIODevice::Text | QIODevice::ReadOnly) == false)
         return;
 
-
     m_isOpen = true;
-
     m_tables << "sheet";
-
 }
 
 void CsvParser::close()
 {
     if(m_inFile)
         m_inFile->close();
-    m_inFile = 0;
+    m_inFile = nullptr;
 }
 
 BaseParser::RowData CsvParser::nextRow()
 {
     RowData data;
 
-    QString line = QTextCodec::codecForName( "ISO-8859-15" )->toUnicode( m_inFile->readLine()).remove(0, 2);
+    QString line = QTextCodec::codecForName( "ISO-8859-15" )->toUnicode( m_inFile->readLine());
     if(line.contains("Nb :")) return data;
     if(line.isEmpty()) return data;
 
@@ -47,9 +44,9 @@ BaseParser::RowData CsvParser::nextRow()
     for(int i=0; i< m_headers.count(); i++)
     {
         QString s = split.at(i);
-        s = decodeString( s.toLocal8Bit());
 
-        data[m_headers.at(i)] = s;
+
+        data[m_headers.at(i)] = s.trimmed();
     }
 
     return data;
@@ -59,18 +56,18 @@ BaseParser::RowData CsvParser::nextRow()
 }}
 
 
-void tnk::parser::CsvParser::selectTable(bool withHeaders, const QString &tableName)
+void tnk::parser::CsvParser::selectTable(const QString &tableName, int headerLine)
 {
 
-    QString line = QTextCodec::codecForName( "ISO-8859-15" )->toUnicode( m_inFile->readLine()).remove(0, 2);
 
-    line.replace(QRegExp("[éèë]"), "e");
-    line.replace(QRegExp("[à]"), "a");
-    line.replace(QRegExp("[à]"), "a");
-    line.replace(QRegExp("°"), "");
-    //line.replace(QRegExp("."), "");
-    line.replace(QRegExp("  "), " ");
+    for(int i=0; i<headerLine; i++)
+    {
+        m_inFile->readLine();
+    }
 
+    QString line = QTextCodec::codecForName( "ISO-8859-15" )->toUnicode( m_inFile->readLine());
+
+    line = decodeString( line.toLocal8Bit());
 
     QStringList TempHeaders;
     m_headers.clear();
@@ -81,7 +78,7 @@ void tnk::parser::CsvParser::selectTable(bool withHeaders, const QString &tableN
 
     foreach(QString h, TempHeaders)
     {
-        if( withHeaders)
+        if( headerLine)
         {
             h = h.trimmed();
             m_headers.push_back(h);
@@ -93,7 +90,7 @@ void tnk::parser::CsvParser::selectTable(bool withHeaders, const QString &tableN
         }
     }
 
-    if( withHeaders == false)
+    if( headerLine == false)
         m_inFile->seek(0);
 
 }

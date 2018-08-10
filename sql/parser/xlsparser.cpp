@@ -64,7 +64,7 @@ BaseParser::RowData XlsParser::nextRow()
 
     for(int i=0; i< line.count(); i++)
     {
-        data[m_headers.at(i)] = decodeString( line.at(i));
+        data[m_headers.at(i)] =  line.at(i).trimmed();
     }
 
     m_currentRow++;
@@ -74,7 +74,7 @@ BaseParser::RowData XlsParser::nextRow()
 
 
 
-void XlsParser::selectTable(bool withHeaders, const QString &tableName)
+void XlsParser::selectTable(const QString &tableName, int headerLine)
 {
 
 
@@ -102,6 +102,14 @@ void XlsParser::selectTable(bool withHeaders, const QString &tableName)
         m_lines.removeFirst();
 
 
+
+    for(int i=0; i<headerLine; i++)
+    {
+        m_lines.removeFirst();
+    }
+
+
+
     m_headers.clear();
 
     QStringList TempHeaders;
@@ -116,7 +124,7 @@ void XlsParser::selectTable(bool withHeaders, const QString &tableName)
 
     foreach(QString h, TempHeaders)
     {
-        if( withHeaders)
+        if( headerLine)
         {
             h = decodeString( h.trimmed());
             m_headers.push_back(h);
@@ -129,7 +137,7 @@ void XlsParser::selectTable(bool withHeaders, const QString &tableName)
     }
 
 
-    m_currentRow = withHeaders ? 1 : 0;
+    m_currentRow = headerLine ? 1 : 0;
 
 }
 

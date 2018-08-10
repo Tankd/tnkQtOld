@@ -117,7 +117,7 @@ public:
             }
             return obj;
         }
-        return NULL;
+        return nullptr;
     }
 
     template < class T>
@@ -162,7 +162,7 @@ public:
             }
             return obj;
         }
-        return NULL;
+        return nullptr;
     }
 
     template< class T>
