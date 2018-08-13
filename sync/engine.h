@@ -1,7 +1,6 @@
 #ifndef MYDATASYNC_H
 #define MYDATASYNC_H
 
-#include <QQmlEngine>
 #include <QObject>
 #include <QMap>
 
@@ -60,8 +59,8 @@ public:
         _createFuncs.insert( QString(T::staticMetaObject.className()),
                              &Engine::createFirstCb<T>);
 
-        qDebug() <<  T::staticMetaObject.className();
-        qmlRegisterType<T>("datasync", 1, 0, T::staticMetaObject.className());
+      
+      //  qmlRegisterType<T>("datasync", 1, 0, T::staticMetaObject.className());
     }
 
 
