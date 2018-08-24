@@ -49,7 +49,7 @@ public:
 
 
     template <class T>
-    void registerType( const char *uri, int versionMajor, int versionMinor) {
+    void registerType( ) {
 
         createTables( T::staticMetaObject);
 
@@ -59,8 +59,7 @@ public:
         _createFuncs.insert( QString(T::staticMetaObject.className()),
                              &Engine::createFirstCb<T>);
 
-      
-      //  qmlRegisterType<T>("datasync", 1, 0, T::staticMetaObject.className());
+        //qmlRegisterType<T>("datasync", 1, 0, T::staticMetaObject.className());
     }
 
 
@@ -211,7 +210,7 @@ public:
 
     template< class T>
     QList<Object*> selectObjects( const QString& filter = "1")
-    {      
+    {
         QList<Object*> result;
         QueryBuilder builder( this->db(),  QueryBuilder::SELECT);
         builder.setMetaObject( (QMetaObject*)&T::staticMetaObject);

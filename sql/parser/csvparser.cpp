@@ -58,7 +58,7 @@ BaseParser::RowData CsvParser::nextRow()
 
 void tnk::parser::CsvParser::selectTable(const QString &tableName, int headerLine)
 {
-
+    Q_UNUSED(tableName)
 
     for(int i=0; i<headerLine; i++)
     {

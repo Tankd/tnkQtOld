@@ -28,7 +28,7 @@ QSqlDatabase loadConfig(const QString& name, const QString &prefix)
 
 QSqlDatabase setupSqlDatabase(const QString &name, QJsonObject data)
 {
-    QSqlDatabase db = QSqlDatabase::addDatabase( data.value("driver").toString());
+    QSqlDatabase db = QSqlDatabase::addDatabase( data.value("driver").toString(), name);
 
     db.setHostName(  data.value("host").toString());
     db.setPort(  data.value("port").toInt());
@@ -41,7 +41,7 @@ QSqlDatabase setupSqlDatabase(const QString &name, QJsonObject data)
 
 void showSqlDebug(QSqlQuery *q)
 {
-    if(q == 0)
+    if(q == nullptr)
         return;
     if( q->lastError().isValid())
     {
