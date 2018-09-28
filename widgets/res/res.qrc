@@ -1,8 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>close.png</file>
-        <file>maximize.png</file>
-        <file>minimize.png</file>
-        <file>shownormal.png</file>
-    </qresource>
-</RCC>
