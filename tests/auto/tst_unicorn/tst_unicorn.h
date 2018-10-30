@@ -21,7 +21,8 @@ protected:
         QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
         db.setDatabaseName(":memory:");
         db.open();
-        m_engine = new unicorn::Engine(db );
+        m_engine = new unicorn::Engine( );
+        m_engine->setDb(db);
         m_engine->createTable(Author::staticMetaObject);
         m_engine->createTable(Book::staticMetaObject);
 

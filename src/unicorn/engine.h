@@ -35,7 +35,7 @@ public:
     }Error;
 
 
-    explicit Engine(QSqlDatabase db, const QString& tableNamePrefix = QString(), QObject *parent = nullptr);
+    explicit Engine( QObject *parent = nullptr);
 
 
     void createTable(QMetaObject meta);
@@ -115,10 +115,10 @@ public:
             auto prop = T::staticMetaObject.property(i);
             if( QString(prop.typeName()).right(1) == "*")
             {
-                    joins << QString("INNER JOIN '%1' ON '%2'.'%3' = '%1'.id")
-                             .arg( getTableName( QString(prop.typeName()).remove("*")))
-                             .arg(tableName )
-                             .arg(prop.name());
+                joins << QString("INNER JOIN '%1' ON '%2'.'%3' = '%1'.id")
+                         .arg( getTableName( QString(prop.typeName()).remove("*")))
+                         .arg(tableName )
+                         .arg(prop.name());
 
             }
         }
@@ -165,6 +165,7 @@ public:
     void remove(QList<unicorn::Entity*> *entities);
 
     QSqlDatabase getDb() const;
+    void setDb(const QSqlDatabase &db);
     Error getLastError() const;
 
     QString getTableNamePrefix() const;
@@ -180,12 +181,16 @@ public:
         return false;
     }
 
+
+
+    void setTableNamePrefix(const QString &tableNamePrefix);
+
 protected:
     QSqlDatabase _db;
     QString _tableNamePrefix;
     Error _lastError;
 
-      void getInstancied(unicorn::Entity *entity, int id);
+    void getInstancied(unicorn::Entity *entity, int id);
 
 
     void setLastError( Engine::ErrorType type, const QString& text, const QString& sqlText = QString())

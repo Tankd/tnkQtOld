@@ -1,12 +1,13 @@
 #ifndef BASEPARSER_H
 #define BASEPARSER_H
 
+#include "parser_global.h"
 #include <QMap>
 
 namespace tnk {
 namespace parser {
 
-class BaseParser
+class Q_TNK_PARSER_EXPORT BaseParser
 {
 public:
     typedef QMap< QString, QString > RowData;

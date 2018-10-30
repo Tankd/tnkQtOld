@@ -1,6 +1,7 @@
 #ifndef CSVPARSER_H
 #define CSVPARSER_H
 
+#include "parser_global.h"
 #include "baseparser.h"
 
 class QFile;
@@ -9,7 +10,7 @@ namespace tnk {
 namespace parser {
 
 
-class CsvParser : public BaseParser
+class Q_TNK_PARSER_EXPORT CsvParser : public BaseParser
 {
 public:
     CsvParser();

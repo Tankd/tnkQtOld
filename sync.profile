@@ -3,7 +3,7 @@
     "QtTnkSql" => "$basedir/src/sql",
     "QtTnkWs" => "$basedir/src/ws",
     "QtTnkParser" => "$basedir/src/parser",
-    "QtTnkUnicorn" => "$basedir/src/unicorn",
+    "QtTnkUnicorn" => "$basedir/src/unicorn",    
 );
 %moduleheaders = ( # restrict the module headers to those found in relative path
 );

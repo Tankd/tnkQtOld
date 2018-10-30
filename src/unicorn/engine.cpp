@@ -9,10 +9,8 @@
 
 namespace unicorn {
 
-Engine::Engine(QSqlDatabase db, const QString &tableNamePrefix, QObject *parent)
-    : QObject(parent),
-      _db(db),
-      _tableNamePrefix(tableNamePrefix)
+Engine::Engine(QObject *parent)
+    : QObject(parent)
 {
 
 }
@@ -341,6 +339,16 @@ Engine::Error Engine::getLastError() const
 QString Engine::getTableNamePrefix() const
 {
     return _tableNamePrefix;
+}
+
+void Engine::setTableNamePrefix(const QString &tableNamePrefix)
+{
+    _tableNamePrefix = tableNamePrefix;
+}
+
+void Engine::setDb(const QSqlDatabase &db)
+{
+    _db = db;
 }
 
 }

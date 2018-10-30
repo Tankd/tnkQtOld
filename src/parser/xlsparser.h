@@ -1,12 +1,13 @@
 #ifndef XLSPARSER_H
 #define XLSPARSER_H
 
+
 #include "csvparser.h"
 
 namespace tnk {
 namespace parser {
 
-class XlsParser : public BaseParser
+class Q_TNK_PARSER_EXPORT XlsParser : public BaseParser
 {
 public:
     XlsParser();
